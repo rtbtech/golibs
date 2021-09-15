@@ -18,24 +18,24 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func GetDoc(raw bson.Raw, key string) (bson.Raw, bool) {
+func GetDoc(raw bson.Raw, key string) bson.Raw {
 	if rv, err := raw.LookupErr(key); err == nil {
 		if v, ok := rv.DocumentOK(); ok {
-			return v, true
+			return v
 		}
 	}
 
-	return nil, false
+	return nil
 }
 
-func GetArray(raw bson.Raw, key string) (bson.Raw, bool) {
+func GetArray(raw bson.Raw, key string) bson.Raw {
 	if rv, err := raw.LookupErr(key); err == nil {
 		if v, ok := rv.ArrayOK(); ok {
-			return v, true
+			return v
 		}
 	}
 
-	return nil, false
+	return nil
 }
 
 func GetArrayValues(raw bson.Raw, key string) []bson.RawValue {
@@ -49,18 +49,18 @@ func GetArrayValues(raw bson.Raw, key string) []bson.RawValue {
 	return nil
 }
 
-func GetInt64(raw bson.Raw, key string) (int64, bool) {
+func GetInt64(raw bson.Raw, key string) int64 {
 	if rv, err := raw.LookupErr(key); err == nil {
 		if v, ok := rv.Int64OK(); ok {
-			return v, true
+			return v
 		}
 
 		if v, ok := rv.Int32OK(); ok {
-			return int64(v), true
+			return int64(v)
 		}
 	}
 
-	return 0, false
+	return 0
 }
 
 func GetInt64Quietly(raw bson.Raw, key string, out *int64) {
@@ -75,18 +75,18 @@ func GetInt64Quietly(raw bson.Raw, key string, out *int64) {
 	}
 }
 
-func GetInt32(raw bson.Raw, key string) (int32, bool) {
+func GetInt32(raw bson.Raw, key string) int32 {
 	if rv, err := raw.LookupErr(key); err == nil {
 		if v, ok := rv.Int32OK(); ok {
-			return v, true
+			return v
 		}
 
 		if v, ok := rv.Int64OK(); ok {
-			return int32(v), true
+			return int32(v)
 		}
 	}
 
-	return 0, false
+	return 0
 }
 
 func GetInt32Quietly(raw bson.Raw, key string, out *int32) {
@@ -101,42 +101,14 @@ func GetInt32Quietly(raw bson.Raw, key string, out *int32) {
 	}
 }
 
-func GetInt(raw bson.Raw, key string) (int64, bool) {
-	if rv, err := raw.LookupErr(key); err == nil {
-		if v, ok := rv.Int64OK(); ok {
-			return v, true
-		}
-
-		if v, ok := rv.Int32OK(); ok {
-			return int64(v), true
-		}
-	}
-
-	return 0, false
-}
-
-func GetIntQuietly(raw bson.Raw, key string, out *int64) {
-	if rv, err := raw.LookupErr(key); err == nil && out != nil {
-		if v, ok := rv.Int64OK(); ok {
-			*out = v
-			return
-		}
-
-		if v, ok := rv.Int32OK(); ok {
-			*out = int64(v)
-			return
-		}
-	}
-}
-
-func GetDouble(raw bson.Raw, key string) (float64, bool) {
+func GetDouble(raw bson.Raw, key string) float64 {
 	if rv, err := raw.LookupErr(key); err == nil {
 		if v, ok := rv.DoubleOK(); ok {
-			return v, true
+			return v
 		}
 	}
 
-	return 0, false
+	return 0
 }
 
 func GetDoubleQuietly(raw bson.Raw, key string, out *float64) {
@@ -147,12 +119,12 @@ func GetDoubleQuietly(raw bson.Raw, key string, out *float64) {
 	}
 }
 
-func GetBool(raw bson.Raw, key string) (bool, bool) {
+func GetBool(raw bson.Raw, key string) bool {
 	if rv, err := raw.LookupErr(key); err == nil {
 		return rv.BooleanOK()
 	}
 
-	return false, false
+	return false
 }
 
 func GetBoolQuietly(raw bson.Raw, key string, out *bool) {
@@ -163,24 +135,14 @@ func GetBoolQuietly(raw bson.Raw, key string, out *bool) {
 	}
 }
 
-func GetString(raw bson.Raw, key string) (string, bool) {
-	if rv, err := raw.LookupErr(key); err == nil {
-		if v, ok := rv.StringValueOK(); ok {
-			return v, true
-		}
-	}
-
-	return "", false
-}
-
-func GetStringDefault(raw bson.Raw, key string, def string) string {
+func GetString(raw bson.Raw, key string) string {
 	if rv, err := raw.LookupErr(key); err == nil {
 		if v, ok := rv.StringValueOK(); ok {
 			return v
 		}
 	}
 
-	return def
+	return ""
 }
 
 func GetStringQuietly(raw bson.Raw, key string, out *string) {
