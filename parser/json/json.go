@@ -24,6 +24,14 @@ func String(value *fastjson.Value) string {
 	return ""
 }
 
+func Int64(value *fastjson.Value) int64 {
+	if d, err := value.Int64(); err != nil {
+		return d
+	}
+
+	return 0
+}
+
 func GetBytes(value *fastjson.Value, key string) []byte {
 	if b := value.GetStringBytes(key); b != nil && len(b) > 0 {
 		return b
