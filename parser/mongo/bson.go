@@ -121,7 +121,9 @@ func GetDoubleQuietly(raw bson.Raw, key string, out *float64) {
 
 func GetBool(raw bson.Raw, key string) bool {
 	if rv, err := raw.LookupErr(key); err == nil {
-		return rv.BooleanOK()
+		if v, ok := rv.BooleanOK(); ok {
+			return v
+		}
 	}
 
 	return false
