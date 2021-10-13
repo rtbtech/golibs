@@ -17,11 +17,27 @@ package json
 import "github.com/valyala/fastjson"
 
 func String(value *fastjson.Value) string {
-	if str, err := value.StringBytes(); err != nil && len(str) > 0 {
+	if str, err := value.StringBytes(); err == nil && len(str) > 0 {
 		return string(str)
 	}
 
 	return ""
+}
+
+func Int(value *fastjson.Value) int {
+	if d, err := value.Int(); err == nil {
+		return d
+	}
+
+	return 0
+}
+
+func Int64(value *fastjson.Value) int64 {
+	if d, err := value.Int64(); err == nil {
+		return d
+	}
+
+	return 0
 }
 
 func GetBytes(value *fastjson.Value, key string) []byte {
@@ -38,24 +54,4 @@ func GetString(value *fastjson.Value, key string) string {
 	}
 
 	return ""
-}
-
-func GetInt32(value *fastjson.Value, key string) int32 {
-	if b := value.Get(key); b != nil && b.Type() == fastjson.TypeNumber {
-		if num, err := b.Int(); err == nil {
-			return int32(num)
-		}
-	}
-
-	return 0
-}
-
-func GetInt64(value *fastjson.Value, key string) int64 {
-	if b := value.Get(key); b != nil && b.Type() == fastjson.TypeNumber {
-		if num, err := b.Int(); err == nil {
-			return int64(num)
-		}
-	}
-
-	return 0
 }
